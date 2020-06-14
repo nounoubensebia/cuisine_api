@@ -28,14 +28,28 @@ class RecipeRepository extends ServiceEntityRepository
         $this->ingredientRepository = $ingredientRepository;
     }
 
-
-    public function findById ($id)
+    /**
+     * @param $id
+     * @return Recipe|null
+     * returns the recipe which corresponds to id or null
+     */
+    public function findById ($id):?Recipe
     {
+        /**
+         * @var Recipe $recipe
+         */
         $recipe = $this->manager->find(Recipe::class,$id);
         return $recipe;
     }
 
-    public function saveRecipe($title,$sub_title,$ingredients)
+    /**
+     * @param $title
+     * @param $sub_title
+     * @param $ingredients
+     * @return Recipe
+     * adds a new recipe to the database
+     */
+    public function addRecipe($title, $sub_title, $ingredients)
     {
         $recipe = new Recipe();
         $recipe->setTitle($title);
@@ -49,7 +63,6 @@ class RecipeRepository extends ServiceEntityRepository
                 $ingredientObj = new Ingredient();
                 $ingredientObj->setName($ingredient['name']);
             }
-            //$ingredientObj->addRecipe($recipe);
             $recipe->addIngredient($ingredientObj);
         }
 
@@ -59,6 +72,16 @@ class RecipeRepository extends ServiceEntityRepository
         return $recipe;
 
     }
+
+
+    /**
+     * @param $id
+     * @param $title
+     * @param $sub_title
+     * @param $ingredients
+     *
+     * updates an existing recipe, the ingredients list will be overwritten by the new ingredients array
+     */
 
     public function updateRecipe($id,$title,$sub_title,$ingredients)
     {
@@ -117,6 +140,11 @@ class RecipeRepository extends ServiceEntityRepository
         $this->manager->flush();
     }
 
+
+    /**
+     * @param Recipe $recipe
+     * delets recipe
+     */
     public function deleteRecipe(Recipe $recipe)
     {
         $this->manager->remove($recipe);

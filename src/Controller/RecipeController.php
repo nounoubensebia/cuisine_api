@@ -56,7 +56,7 @@ class RecipeController
 
     /**
      * adds a recipe to the database
-     * one recipe requires at least one ingredient to be present
+     * one recipe has a minimum of one ingredient
      * recipe ingredients are created only if they don't already exist in the database
      * @Route("/recipes", name="recipe_post", methods={"POST"})
      */
@@ -101,7 +101,7 @@ class RecipeController
 
         //saving the new recipe in the database using the repository object
 
-        $recipe = $this->recipeRepository->saveRecipe($title,$sub_title,$ingredients);
+        $recipe = $this->recipeRepository->addRecipe($title,$sub_title,$ingredients);
 
         $message = ["msg" => "recipe created", "recipe"=>$recipe->toArray() ];
 
@@ -110,6 +110,7 @@ class RecipeController
 
     /**
      * @Route("/recipes/{id}", name="recipe_update", methods={"PUT"})
+     * updates an existing recipe, the ingredients list will be overwritten by the new ingredients array
      */
     public function updateRecipe(Request $request,$id) : JsonResponse
     {
@@ -154,6 +155,7 @@ class RecipeController
 
     /**
      * @Route("/recipes/{id}", name="recipe_delete", methods={"DELETE"})
+     * deletes recipe
      */
     public function deleteRecipe($id) : JsonResponse
     {
